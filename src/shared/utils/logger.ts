@@ -25,7 +25,7 @@ export class Logger {
         this.config = {
             level: LogLevel.INFO,
             prefix: '[TSFX]',
-            timestamp: true,
+            timestamp: false,
             colours: true,
             ...confg,
         };
