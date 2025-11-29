@@ -15,6 +15,7 @@
     "@citizenfx/client": "2.0.22934-1",
     "@citizenfx/server": "2.0.22934-1",
     "@types/node": "^24.10.1",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "yoctocolors": "^2.1.2"
   }
 }
