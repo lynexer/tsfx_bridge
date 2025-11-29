@@ -7,7 +7,7 @@
     },
     "files": {
         "ignoreUnknown": true,
-        "includes": ["src/**/*.{ts,js}"]
+        "includes": ["src/**/*.{ts,js}", "build/*.cjs"]
     },
     "formatter": {
         "enabled": true,

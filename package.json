@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "pnpm clean && node build/build-bundle.cjs",
+    "clean": "rimraf dist",
     "lint": "biome check --write"
   },
   "keywords": [],
@@ -15,6 +17,8 @@
     "@citizenfx/client": "2.0.22934-1",
     "@citizenfx/server": "2.0.22934-1",
     "@types/node": "^24.10.1",
+    "esbuild": "^0.27.0",
+    "rimraf": "^6.1.2",
     "typescript": "^5.9.3",
     "yoctocolors": "^2.1.2"
   }
