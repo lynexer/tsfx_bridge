@@ -17,6 +17,9 @@
         "declarationMap": true,
         "sourceMap": true,
         "baseUrl": ".",
+        "incremental": false,
+        "isolatedModules": true,
+        "types": ["@citizenfx/server", "@citizenfx/client", "@types/node"],
         "paths": {
             "@shared/*": ["src/shared/*"],
             "@server/*": ["src/server/*"],
