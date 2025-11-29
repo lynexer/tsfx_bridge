@@ -11,6 +11,12 @@ importers:
       '@biomejs/biome':
         specifier: 2.3.8
         version: 2.3.8
+      '@citizenfx/client':
+        specifier: 2.0.22934-1
+        version: 2.0.22934-1
+      '@citizenfx/server':
+        specifier: 2.0.22934-1
+        version: 2.0.22934-1
       '@types/node':
         specifier: ^24.10.1
         version: 24.10.1
@@ -73,6 +79,12 @@ packages:
     cpu: [x64]
     os: [win32]
 
+  '@citizenfx/client@2.0.22934-1':
+    resolution: {integrity: sha512-F513+od21P2QrAj3PTvDKfaUb6/65WmBrUFE5JiA8zmLIf5gKb3EtWsomzYNCqFSol49CnjKjHS6ZzNXujUImw==}
+
+  '@citizenfx/server@2.0.22934-1':
+    resolution: {integrity: sha512-sxNUHbMlVEMhQXQCqvFykxNFQlFQxcKzRsgv+jmOumAs9QZpEIDo1KewNQEfC5DXz8OjmjoNXDLWWO2MyYHsaQ==}
+
   '@types/node@24.10.1':
     resolution: {integrity: sha512-GNWcUTRBgIRJD5zj+Tq0fKOJ5XZajIiBroOF0yvj2bSU1WvNdYS/dn9UxwsujGW4JX06dnHyjV2y9rRaybH0iQ==}
 
@@ -120,6 +132,10 @@ snapshots:
 
   '@biomejs/cli-win32-x64@2.3.8':
     optional: true
+
+  '@citizenfx/client@2.0.22934-1': {}
+
+  '@citizenfx/server@2.0.22934-1': {}
 
   '@types/node@24.10.1':
     dependencies:
