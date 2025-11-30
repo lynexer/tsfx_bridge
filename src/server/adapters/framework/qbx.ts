@@ -27,6 +27,18 @@ export class QBXAdapter implements FrameworkAdapter {
         return this.normalizePlayer(player);
     }
 
+    onPlayerLoaded(callback: (source: number, player: Player) => void): void {
+        on('QBCore:Server:PlayerLoaded', (player: QBXPlayer) => {
+            callback(player.PlayerData.source as number, this.normalizePlayer(player));
+        });
+    }
+
+    onPlayerUnloaded(callback: (source: number) => void): void {
+        on('QBCore:Server:OnPlayerUnload', (source: number) => {
+            callback(source);
+        });
+    }
+
     private normalizePlayer(player: QBXPlayer): Player {
         return {
             source: player.PlayerData.source,
