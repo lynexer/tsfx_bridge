@@ -31,6 +31,10 @@ export class RPCRegistry {
 
         return await method.handler(...args);
     }
+
+    getAll(): RPCMethod[] {
+        return Array.from(this.methods.values());
+    }
 }
 
 export const registry = new RPCRegistry();
