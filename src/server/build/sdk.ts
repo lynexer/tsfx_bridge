@@ -1,5 +1,7 @@
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
+import { DevFrameworkAdapter } from '@server/adapters/framework/dev';
+import { registerModules } from '@server/registry/module-registry';
 import { registry } from '@server/registry/registry';
 import type { ParameterDef, RPCMethod } from '@server/registry/types';
 import { capitalize } from '@shared/utils/helpers';
@@ -7,6 +9,13 @@ import { logger } from '@shared/utils/logger';
 
 export const generateServerSDK = () => {
     logger.info('Generating server Lua SDK...');
+    logger.info('Registering modules with dev adapters...');
+
+    const devFrameworkAdapter = new DevFrameworkAdapter();
+
+    const modules = registerModules(devFrameworkAdapter);
+
+    logger.info(`Registered ${modules.length} modules`);
 
     const methods = registry.getAll();
 
@@ -15,23 +24,27 @@ export const generateServerSDK = () => {
         return;
     }
 
-    const modules = new Map<string, typeof methods>();
+    logger.info(`Found ${methods.length} RPC methods`);
+
+    const moduleMap = new Map<string, typeof methods>();
 
     methods.forEach((method) => {
         const [moduleName] = method.name.split('.');
 
-        if (!modules.has(moduleName)) {
-            modules.set(moduleName, []);
+        if (!moduleMap.has(moduleName)) {
+            moduleMap.set(moduleName, []);
         }
 
-        modules.get(moduleName)?.push(method);
+        moduleMap.get(moduleName)?.push(method);
     });
 
-    modules.forEach((methods, moduleName) => {
+    logger.info(`Generating SDK for ${moduleMap.size} modules...`);
+
+    moduleMap.forEach((methods, moduleName) => {
         generateModuleSDK(moduleName, methods);
     });
 
-    logger.info(`Generated SDK for ${modules.size} modules (${methods.length} methods)`);
+    logger.info(`Generated SDK for ${moduleMap.size} modules (${methods.length} methods)`);
 };
 
 const generateModuleSDK = (moduleName: string, methods: RPCMethod[]) => {
@@ -121,7 +134,7 @@ end
 
     lua += `return ${className}\n`;
 
-    const outputPath = join(__dirname, `../../../../lua/generated/server/sdk/${moduleName}.lua`);
+    const outputPath = join(__dirname, `../../../lua/generated/server/sdk/${moduleName}.lua`);
     mkdirSync(dirname(outputPath), { recursive: true });
     writeFileSync(outputPath, lua);
 };
@@ -148,3 +161,5 @@ function luaType(tsType: string): string {
 
     return typeMap[tsType] || tsType;
 }
+
+generateServerSDK();
