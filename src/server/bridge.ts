@@ -4,7 +4,7 @@ import type { FrameworkAdapter } from './adapters/framework/base';
 import { detectFramework } from './detection/framework';
 import { eventEmitter } from './events/emitter';
 import type { BridgeModule } from './modules/base';
-import { PlayerModule } from './modules/player';
+import { registerModules } from './registry/module-registry';
 import { registry } from './registry/registry';
 
 class Bridge {
@@ -28,7 +28,10 @@ class Bridge {
             logger.info(`Framework: ${this.frameworkAdapter.getName()}`);
 
             logger.debug('Registering modules...');
-            this.registerModule(new PlayerModule(this.frameworkAdapter));
+            this.modules = registerModules(this.frameworkAdapter);
+            this.modules.forEach((module) => {
+                logger.debug(`Registered module: ${module.getName()}`);
+            });
 
             logger.debug('Registering events...');
             this.registerEvents();
@@ -41,11 +44,6 @@ class Bridge {
         } catch (error) {
             logger.fatal('', error);
         }
-    }
-
-    private registerModule(module: BridgeModule): void {
-        this.modules.push(module);
-        logger.debug(`Registered module: ${module.getName()}`);
     }
 
     private registerEvents(): void {
