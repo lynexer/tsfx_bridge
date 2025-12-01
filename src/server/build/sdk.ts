@@ -7,6 +7,7 @@ import { registry } from '@server/registry/registry';
 import type { ParameterDef, RPCMethod } from '@server/registry/types';
 import { capitalize } from '@shared/utils/helpers';
 import { logger } from '@shared/utils/logger';
+import { generateLuaTypes } from './types';
 
 export const generateServerSDK = () => {
     logger.info('Generating server Lua SDK...');
@@ -26,6 +27,8 @@ export const generateServerSDK = () => {
     }
 
     logger.info(`Found ${methods.length} RPC methods`);
+
+    generateLuaTypes();
 
     const moduleMap = new Map<string, typeof methods>();
 
