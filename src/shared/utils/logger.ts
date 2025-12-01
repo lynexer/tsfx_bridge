@@ -181,3 +181,41 @@ export class Logger {
 }
 
 export const logger = new Logger();
+
+export function configureLoggerFromConvars(prefix: string = 'bridge'): void {
+    const levelStr = GetConvar(`${prefix}_log_level`, 'INFO').toUpperCase();
+    const timestamp = GetConvar(`${prefix}_log_timestamp`, 'false') === 'true';
+    const colours = GetConvar(`${prefix}_log_colours`, 'true') === 'true';
+
+    let level: LogLevel;
+
+    switch (levelStr) {
+        case 'TRACE':
+            level = LogLevel.TRACE;
+            break;
+        case 'DEBUG':
+            level = LogLevel.DEBUG;
+            break;
+        case 'INFO':
+            level = LogLevel.INFO;
+            break;
+        case 'WARN':
+            level = LogLevel.WARN;
+            break;
+        case 'ERROR':
+            level = LogLevel.ERROR;
+            break;
+        case 'FATAL':
+            level = LogLevel.FATAL;
+            break;
+        case 'NONE':
+            level = LogLevel.NONE;
+            break;
+        default:
+            level = LogLevel.INFO;
+    }
+
+    logger.setLevel(level);
+    logger.setTimestamp(timestamp);
+    logger.setColours(colours);
+}

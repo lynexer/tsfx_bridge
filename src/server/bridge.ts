@@ -1,5 +1,5 @@
 import { BridgeEvents } from '@shared/constants/events';
-import { logger } from '@shared/utils/logger';
+import { configureLoggerFromConvars, logger } from '@shared/utils/logger';
 import type { FrameworkAdapter } from './adapters/framework/base';
 import { detectFramework } from './detection/framework';
 import { eventEmitter } from './events/emitter';
@@ -12,6 +12,8 @@ class Bridge {
     private frameworkAdapter?: FrameworkAdapter;
 
     async initialize() {
+        configureLoggerFromConvars('bridge');
+
         logger.info('='.repeat(30));
         logger.info('Initializing Bridge...');
         logger.info(
