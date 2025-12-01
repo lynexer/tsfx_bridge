@@ -9,6 +9,12 @@ const TARGET_ENTRIES = [
         platform: 'node',
         outfile: './dist/server/server.js',
     },
+    {
+        target: 'node16',
+        entryPoints: ['src/server/build/sdk.ts'],
+        platform: 'node',
+        outfile: './dist/server/build/sdk.js',
+    },
 ];
 
 const buildBundle = async () => {
