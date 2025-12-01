@@ -35,6 +35,10 @@ export class RPCRegistry {
     getAll(): RPCMethod[] {
         return Array.from(this.methods.values());
     }
+
+    count(): number {
+        return this.methods.size;
+    }
 }
 
 export const registry = new RPCRegistry();
