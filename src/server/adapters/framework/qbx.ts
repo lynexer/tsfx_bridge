@@ -10,7 +10,7 @@ export class QBXAdapter implements FrameworkAdapter {
     }
 
     getName(): string {
-        return 'QBXCore';
+        return 'QBox';
     }
 
     getPlayer(source: number): Player | null {
