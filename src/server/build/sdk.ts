@@ -119,7 +119,7 @@ end
 
         lua += `---@return ${luaType(method.returns || 'any')}\n`;
         lua += `function ${className}:${fnName}(${paramNames})\n`;
-        lua += `    return exports['bridge']:_call('${method.name}', self.source${paramNames ? `, ${paramNames}` : ''})\n`;
+        lua += `    return exports['tsfx_bridge']:_call('${method.name}', self.source${paramNames ? `, ${paramNames}` : ''})\n`;
         lua += `end\n\n`;
     });
 
@@ -128,7 +128,7 @@ end
     lua += `function ${className}:Execute()\n`;
     lua += `    for _, op in ipairs(self.operations) do\n`;
     lua += `        if op.type == 'call' then\n`;
-    lua += `            exports['bridge']:_call(op.method, table.unpack(op.args))\n`;
+    lua += `            exports['tsfx_bridge']:_call(op.method, table.unpack(op.args))\n`;
     lua += `        end\n`;
     lua += `    end\n`;
     lua += `    self.operations = {}\n`;
@@ -369,7 +369,7 @@ function TransactionSDK:Commit()
     
     -- Execute all operations
     for _, op in ipairs(self.operations) do
-        local success = exports['bridge']:_call(op.type, self.source, table.unpack(op.args))
+        local success = exports['tsfx_bridge']:_call(op.type, self.source, table.unpack(op.args))
         if not success then
             if self.onFailure then
                 self.onFailure('Operation failed: ' .. op.type)
