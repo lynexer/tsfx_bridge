@@ -54,6 +54,16 @@ class Bridge {
             }
         });
     }
+
+    async call(path: string, ...args: unknown[]): Promise<unknown> {
+        try {
+            logger.trace(`RPC call: ${path}`, args);
+            return await registry.call(path, ...args);
+        } catch (error) {
+            logger.error(`RPC call failed: ${path}`, error);
+            throw error;
+        }
+    }
 }
 
 const bridge = new Bridge();
@@ -64,4 +74,14 @@ on('onServerResourceStart', (resourceName: string) => {
             logger.fatal('Failed to start bridge:', error);
         });
     }
+});
+
+on('onServerResourceStop', (resourcename: string) => {
+    if (resourcename === GetCurrentResourceName()) {
+        logger.info('Shutting down bridge...');
+    }
+});
+
+exports('_call', async (path: string, ...args: unknown[]) => {
+    return await bridge.call(path, ...args);
 });
