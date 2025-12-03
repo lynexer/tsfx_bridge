@@ -4,8 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "pnpm clean && node build/build-bundle.cjs",
-    "clean": "rimraf dist",
+    "build": "pnpm clean && node build/build-bundle.cjs && pnpm generate",
+    "generate": "pnpm generate:server",
+    "generate:server": "node dist/server/build/sdk.js",
+    "clean": "pnpm clean:js && pnpm clean:lua",
+    "clean:js": "rimraf dist",
+    "clean:lua": "rimraf lua/generated",
     "lint": "biome check --write"
   },
   "keywords": [],
