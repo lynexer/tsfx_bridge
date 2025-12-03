@@ -40,6 +40,10 @@ export class RPCRegistry {
         return Array.from(this.methods.values());
     }
 
+    getAllByPrefix(prefix: string): RPCMethod[] {
+        return Array.from(this.methods.values()).filter((m) => m.name.startsWith(prefix));
+    }
+
     count(): number {
         return this.methods.size;
     }

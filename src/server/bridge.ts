@@ -74,6 +74,16 @@ class Bridge {
             modules: this.modules.map((m) => m.getName()),
         };
     }
+
+    getMethods() {
+        return registry.getAll().map((m) => ({
+            name: m.name,
+            description: m.description,
+            category: m.category,
+            params: m.params,
+            returns: m.returns,
+        }));
+    }
 }
 
 const bridge = new Bridge();
@@ -100,6 +110,20 @@ exports('GetInfo', () => {
     return bridge.getInfo();
 });
 
+exports('GetMethods', () => {
+    return bridge.getMethods();
+});
+
+exports('GetMethodsByModule', (moduleName: string) => {
+    return registry.getAllByPrefix(`${moduleName}.`).map((m) => ({
+        name: m.name,
+        description: m.description,
+        category: m.category,
+        params: m.params,
+        returns: m.returns,
+    }));
+});
+
 RegisterCommand(
     'tsfx:info',
     () => {
@@ -112,6 +136,44 @@ RegisterCommand(
         console.log(`Framework: ${info.framework}`);
         console.log(`RPC Methods: ${info.methods}`);
         console.log(`Modules: ${info.modules.join(', ')}`);
+        console.log('='.repeat(30));
+    },
+    true,
+);
+
+RegisterCommand(
+    'tsfx:methods',
+    () => {
+        const methods = bridge.getMethods();
+
+        console.log('='.repeat(30));
+        console.log(`[TSFX] Registered Methods (${methods.length})`);
+        console.log('='.repeat(30));
+
+        const grouped = new Map<string, typeof methods>();
+
+        methods.forEach((m) => {
+            const [module] = m.name.split('.');
+            if (!grouped.has(module)) {
+                grouped.set(module, []);
+            }
+            grouped.get(module)?.push(m);
+        });
+
+        grouped.forEach((methods, module) => {
+            console.log(`\n[${module.toUpperCase()}] (${methods.length} methods)`);
+
+            methods.forEach((m) => {
+                const params = m.params?.map((p) => `${p.name}: ${p.type}`).join(', ') || '';
+
+                console.log(`  ${m.name}(${params}) -> ${m.returns || 'void'}`);
+
+                if (m.description) {
+                    console.log(`    ${m.description}`);
+                }
+            });
+        });
+
         console.log('='.repeat(30));
     },
     true,
