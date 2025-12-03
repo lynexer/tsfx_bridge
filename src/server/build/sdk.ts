@@ -166,11 +166,11 @@ const generateMainSDK = (moduleNames: string[]) => {
     moduleNames.forEach((moduleName) => {
         const className = `${capitalize(moduleName)}SDK`;
         lua += `---@class ${className}\n`;
-        lua += `local ${className} = require('generated/server/sdk/${moduleName}')\n`;
+        lua += `local ${className} = require('lua/generated/server/sdk/${moduleName}')\n`;
     });
 
     lua += `---@class TransactionSDK\n`;
-    lua += `local TransactionSDK = require('generated/server/sdk/transaction')\n\n`;
+    lua += `local TransactionSDK = require('lua/generated/server/sdk/transaction')\n\n`;
 
     lua += `---@class BridgeSDK\n`;
     lua += `local BridgeSDK = {}\n\n`;
