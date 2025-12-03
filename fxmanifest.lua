@@ -7,9 +7,14 @@ shared_scripts {
 }
 
 server_scripts {
-    'dist/server/**/*.js'
+    'dist/server/server.js',
+    'lua/generated/server/sdk.lua'
 }
 
 client_scripts {
     'dist/client/**/*.js'
+}
+
+files {
+    'lua/generated/**/*.lua'
 }
