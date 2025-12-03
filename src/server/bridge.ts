@@ -8,17 +8,18 @@ import { registerModules } from './registry/module-registry';
 import { registry } from './registry/registry';
 
 class Bridge {
+    private version: string = '0.0.0';
     private modules: BridgeModule[] = [];
     private frameworkAdapter?: FrameworkAdapter;
 
     async initialize() {
         configureLoggerFromConvars('bridge');
 
+        this.version = GetResourceMetadata(GetCurrentResourceName(), 'version', 0) ?? '0.0.0';
+
         logger.info('='.repeat(30));
         logger.info('Initializing Bridge...');
-        logger.info(
-            `Version: ${GetResourceMetadata(GetCurrentResourceName(), 'version', 0) ?? '0.0.0'}`,
-        );
+        logger.info(`Version: ${this.version}`);
         logger.info('='.repeat(30));
 
         try {
@@ -64,6 +65,15 @@ class Bridge {
             throw error;
         }
     }
+
+    getInfo() {
+        return {
+            version: this.version,
+            framework: this.frameworkAdapter?.getName(),
+            methods: registry.count(),
+            modules: this.modules.map((m) => m.getName()),
+        };
+    }
 }
 
 const bridge = new Bridge();
@@ -85,3 +95,24 @@ on('onServerResourceStop', (resourcename: string) => {
 exports('_call', async (path: string, ...args: unknown[]) => {
     return await bridge.call(path, ...args);
 });
+
+exports('GetInfo', () => {
+    return bridge.getInfo();
+});
+
+RegisterCommand(
+    'tsfx:info',
+    () => {
+        const info = bridge.getInfo();
+
+        console.log('='.repeat(30));
+        console.log('[TSFX] Bridge Information');
+        console.log('='.repeat(30));
+        console.log(`Version: ${info.version}`);
+        console.log(`Framework: ${info.framework}`);
+        console.log(`RPC Methods: ${info.methods}`);
+        console.log(`Modules: ${info.modules.join(', ')}`);
+        console.log('='.repeat(30));
+    },
+    true,
+);
