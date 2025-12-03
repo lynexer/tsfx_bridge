@@ -248,11 +248,7 @@ const generateMainSDK = (moduleNames: string[]) => {
     lua += `    return builder\n`;
     lua += `end\n\n`;
 
-    lua += `---Get the Bridge SDK\n`;
-    lua += `---@return BridgeSDK\n`;
-    lua += `exports('SDK', function()\n`;
-    lua += `    return BridgeSDK\n`;
-    lua += `end)\n`;
+    lua += `return BridgeSDK\n`;
 
     const outputPath = join(__dirname, `../../../lua/generated/server/sdk.lua`);
     mkdirSync(dirname(outputPath), { recursive: true });

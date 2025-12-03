@@ -16,5 +16,6 @@ client_scripts {
 }
 
 files {
+    'init.lua',
     'lua/generated/**/*.lua'
 }

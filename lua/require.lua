@@ -28,11 +28,11 @@ function require(modname, env)
         error(("^1Circular dependency occurred when loading module '%s'^0"):format(modname))
     end
 
-    local resourceName = GetCurrentResourceName()
+    local resourceName = 'tsfx_bridge'
     local fileContent, err
 
     for _, ext in ipairs({ '.lua', '' }) do
-        local path = ('@%s/%s%s'):format(resourceName, modname, ext)
+        local path = ('@@%s/%s%s'):format(resourceName, modname, ext)
         fileContent = LoadResourceFile(resourceName, ('%s%s'):format(modname, ext))
 
         if fileContent then
