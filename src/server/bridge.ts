@@ -124,6 +124,10 @@ exports('GetMethodsByModule', (moduleName: string) => {
     }));
 });
 
+exports('IsReady', () => {
+    return registry.count() > 0;
+});
+
 RegisterCommand(
     'tsfx:info',
     () => {
