@@ -9,23 +9,43 @@ export interface RPCMethodConfig {
     returns?: string;
 }
 
+const RPC_METADATA_KEY = Symbol('rpcMethods');
+
 export const RPCMethod = (config: RPCMethodConfig) => {
     return <T extends RPCHandler>(
-        _target: object,
-        _propertyKey: string,
+        // biome-ignore lint/suspicious/noExplicitAny: RPC target need any types
+        target: any,
+        propertyKey: string | symbol,
         descriptor: TypedPropertyDescriptor<T>,
     ): TypedPropertyDescriptor<T> => {
-        const originalMethod = descriptor.value;
+        if (!target[RPC_METADATA_KEY]) {
+            target[RPC_METADATA_KEY] = [];
+        }
 
-        registry.register({
-            name: config.name,
-            handler: originalMethod as RPCHandler,
-            description: config.description,
-            params: config.params,
-            returns: config.returns,
-            category: config.category || 'mutation',
+        target[RPC_METADATA_KEY].push({
+            config,
+            propertyKey,
+            method: descriptor.value,
         });
 
         return descriptor;
     };
+};
+
+export const registerRPCMethods = (instance: object): void => {
+    const metadata = instance.constructor.prototype[RPC_METADATA_KEY];
+
+    if (metadata) {
+        for (const { config, method } of metadata) {
+            registry.register({
+                name: config.name,
+                handler: method as RPCHandler,
+                instance: instance,
+                description: config.description,
+                params: config.params,
+                returns: config.returns,
+                category: config.category || 'mutation',
+            });
+        }
+    }
 };

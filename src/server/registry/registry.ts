@@ -29,7 +29,11 @@ export class RPCRegistry {
             throw new Error(`RPC method not found: ${name}`);
         }
 
-        return await method.handler(...args);
+        if (method.instance) {
+            return await method.handler.call(method.instance, ...args);
+        } else {
+            return await method.handler(...args);
+        }
     }
 
     getAll(): RPCMethod[] {

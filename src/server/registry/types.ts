@@ -4,6 +4,7 @@ export type RPCHandler = (...args: any[]) => any;
 export interface RPCMethod {
     name: string;
     handler: RPCHandler;
+    instance?: object;
     description?: string;
     params?: ParameterDef[];
     returns?: string;
